@@ -418,6 +418,7 @@ function JudgePage(props: {
   const [running, setRunning] = useState(false);
   const [savingCode, setSavingCode] = useState(false);
   const [savedCodeHint, setSavedCodeHint] = useState(false);
+  const [saveErrorHint, setSaveErrorHint] = useState(false);
   const selectorRef = useRef<HTMLDivElement>(null);
   const [resultH, setResultH] = useState(() => {
     try { return Number(localStorage.getItem("judge-result-h")) || 290; } catch { return 290; }
@@ -806,22 +807,28 @@ function JudgePage(props: {
             onClick={() => {
               void (async () => {
                 setSavingCode(true);
+                setSaveErrorHint(false);
                 try {
-                  const result = await saveTextAsFile(source);
+                  const base =
+                    selected?.code?.trim() ||
+                    selected?.name?.replace(/[^\w\-]+/g, "_").trim() ||
+                    "main";
+                  const result = await saveTextAsFile(source, base);
                   if (result === "cancelled") return;
                   setSavedCodeHint(true);
                   setTimeout(() => setSavedCodeHint(false), 1800);
-                } catch (e) {
-                  alert("Lưu thất bại: " + (e instanceof Error ? e.message : String(e)));
+                } catch {
+                  setSaveErrorHint(true);
+                  setTimeout(() => setSaveErrorHint(false), 2200);
                 } finally {
                   setSavingCode(false);
                 }
               })();
             }}
             className="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg)] px-2.5 py-1.5 text-xs font-medium text-[var(--color-muted)] transition hover:bg-[var(--color-bg3)] hover:text-[var(--color-ink)] disabled:opacity-40"
-            title="Lưu code — tự đặt tên và đuôi file"
+            title="Lưu mã nguồn (.cpp)"
           >
-            {savingCode ? "Đang lưu…" : savedCodeHint ? "Đã lưu" : "Lưu"}
+            {savingCode ? "Đang lưu…" : saveErrorHint ? "Lưu lỗi" : savedCodeHint ? "Đã lưu" : "Lưu"}
           </button>
 
           <div
@@ -1987,12 +1994,22 @@ function ProblemsPage(props: {
   );
 }
 
-async function saveTextAsFile(content: string): Promise<"saved" | "download" | "cancelled"> {
-  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+async function saveTextAsFile(
+  content: string,
+  suggestedBase = "main",
+): Promise<"saved" | "download" | "cancelled"> {
+  const safeBase = (suggestedBase || "main").replace(/[<>:"/\\|?*\u0000-\u001f]+/g, "_").trim() || "main";
+  const suggestedName = /\.(cpp|cc|cxx|c|h|hpp)$/i.test(safeBase) ? safeBase : `${safeBase}.cpp`;
+  const blob = new Blob([content], { type: "text/x-c++src;charset=utf-8" });
+
   const w = window as Window & {
     showSaveFilePicker?: (options?: {
       suggestedName?: string;
       excludeAcceptAllOption?: boolean;
+      types?: Array<{
+        description?: string;
+        accept: Record<string, string[]>;
+      }>;
     }) => Promise<{
       createWritable: () => Promise<{
         write: (data: Blob | string) => Promise<void>;
@@ -2004,7 +2021,17 @@ async function saveTextAsFile(content: string): Promise<"saved" | "download" | "
   if (typeof w.showSaveFilePicker === "function") {
     try {
       const handle = await w.showSaveFilePicker({
-        excludeAcceptAllOption: false,
+        suggestedName,
+        excludeAcceptAllOption: true,
+        types: [
+          {
+            description: "C++ source",
+            accept: {
+              "text/x-c++src": [".cpp", ".cc", ".cxx"],
+              "text/plain": [".cpp"],
+            },
+          },
+        ],
       });
       const writable = await handle.createWritable();
       await writable.write(blob);
@@ -2012,17 +2039,14 @@ async function saveTextAsFile(content: string): Promise<"saved" | "download" | "
       return "saved";
     } catch (e) {
       if (e instanceof DOMException && e.name === "AbortError") return "cancelled";
-      // fall through
+      // fall through → tải xuống im lặng, không dùng prompt xấu
     }
   }
-
-  const name = window.prompt("Đặt tên file (kèm đuôi nếu cần):", "");
-  if (name == null || !name.trim()) return "cancelled";
 
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = name.trim();
+  a.download = suggestedName;
   document.body.appendChild(a);
   a.click();
   a.remove();
