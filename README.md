@@ -114,7 +114,7 @@ Kéo gói test vào → viết C++ → bấm **Chấm bài**.
 - 🏁 **Chấm kiểu đấu trường** — AC / WA / TLE / RE, soi từng test như Codeforces
 - 📜 **Nhật ký tội lỗi** — lịch sử nộp, xem lại code cũ, xuất ZIP mang đi
 - 🌙 **Đêm AC / ngày debug** — theme sáng tối, tùy mood
-- 🧳 **Portable** — đóng gói một phát, máy khác mở là chấm (không cần cài Node)
+- 🧳 **Một file EXE** — double-click là mở web, DB nằm ở `C:\ChamCpp` dùng chung khi cập nhật
 
 ---
 
@@ -130,7 +130,8 @@ npm run dev    # 🔥
 
 Đơn giản thế thôi — xong, không được kêu AI nhé. 🎉
 
-Muốn mang máy khác: `npm run package` → thư mục `portable/` → **Judge.exe**. 🧳✨
+Đóng gói một file: `npm run package` → lấy `release/tognoek.exe`.  
+DB & bài tập: `C:\ChamCpp\data\` (giữ nguyên khi bạn thay EXE mới).
 
 ---
 

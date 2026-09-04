@@ -5,6 +5,7 @@ node_modules/
 dist/
 web/dist/
 portable/
+release/
 *.tsbuildinfo
 
 # Runtime / local data

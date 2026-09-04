@@ -86,12 +86,11 @@ async function main(): Promise<void> {
   registerSettingsRoutes(app, paths);
 
   const distWeb = join(paths.root, "dist", "web");
-  const portableWeb = join(paths.root, "web");
-  const packaged = Boolean(process.env.JUDGE_ROOT);
+  const bundledWeb = join(paths.root, "web");
   const webDir = existsSync(join(distWeb, "index.html"))
     ? distWeb
-    : packaged && existsSync(join(portableWeb, "index.html"))
-      ? portableWeb
+    : existsSync(join(bundledWeb, "index.html"))
+      ? bundledWeb
       : "";
 
   if (webDir) {
@@ -120,6 +119,12 @@ async function main(): Promise<void> {
   app.server.headersTimeout = 310_000;
   const url = `http://${host}:${port}`;
   log.info(`Chấm C++ running at ${url}`);
+  try {
+    const { writeFile } = await import("node:fs/promises");
+    await writeFile(paths.portFile, String(port), "utf8");
+  } catch {
+    /* ignore */
+  }
   if (compiler) {
     log.info(`Compiler: ${compiler.version}`);
     log.debug(compiler.path);
@@ -128,7 +133,8 @@ async function main(): Promise<void> {
   }
 
   const shouldOpen =
-    process.env.JUDGE_OPEN_BROWSER === "1" || process.env.NODE_ENV === "production";
+    process.env.JUDGE_OPEN_BROWSER === "1" ||
+    (process.env.NODE_ENV === "production" && process.env.JUDGE_PACKAGED === "1");
   if (shouldOpen) openBrowser(url);
 }
 
