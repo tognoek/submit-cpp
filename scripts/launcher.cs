@@ -168,15 +168,41 @@ internal static class Program
         return "1.0.0";
     }
 
+    private static string PayloadStamp(string version)
+    {
+        // Same AssemblyVersion can be rebuilt — stamp EXE so updates re-extract.
+        try
+        {
+            var exe = Assembly.GetExecutingAssembly().Location;
+            if (!string.IsNullOrEmpty(exe) && File.Exists(exe))
+            {
+                var info = new FileInfo(exe);
+                return version + "|" + info.Length + "|" + info.LastWriteTimeUtc.Ticks;
+            }
+        }
+        catch { /* ignore */ }
+        return version;
+    }
+
     private static void EnsurePayload(string appRoot, string version, SplashForm splash)
     {
         var marker = Path.Combine(appRoot, ".ready");
-        if (File.Exists(marker) && File.Exists(Path.Combine(appRoot, "server", "index.js")))
-        {
-            return;
-        }
+        var stamp = PayloadStamp(version);
+        var ready =
+            File.Exists(marker)
+            && File.Exists(Path.Combine(appRoot, "server", "index.js"))
+            && string.Equals(File.ReadAllText(marker).Trim(), stamp, StringComparison.Ordinal);
 
-        if (splash != null) splash.SetStatus("Lần đầu chạy — đang giải nén (chờ một chút)…");
+        if (ready) return;
+
+        if (splash != null)
+        {
+            splash.SetStatus(
+                File.Exists(marker)
+                    ? "Đang cập nhật bản mới — giải nén lại…"
+                    : "Lần đầu chạy — đang giải nén (chờ một chút)…"
+            );
+        }
         Application.DoEvents();
 
         if (Directory.Exists(appRoot))
@@ -207,7 +233,7 @@ internal static class Program
                 if (splash != null) splash.SetStatus("Đang giải nén runtime…");
                 Application.DoEvents();
                 ZipFile.ExtractToDirectory(zipPath, appRoot);
-                File.WriteAllText(marker, version);
+                File.WriteAllText(marker, stamp);
             }
             finally
             {
