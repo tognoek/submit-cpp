@@ -1,0 +1,46 @@
+# Giấy phép Chấm C++ (Attribution Open License)
+
+Copyright (c) 2026 **tognoek**  
+Dự án: **Chấm C++** · liên hệ: tognoek@gmail.com
+
+---
+
+## Tiếng Việt
+
+Phần mềm này được phát hành dưới dạng **mã nguồn mở**. Bạn được phép:
+
+- sử dụng (cá nhân hoặc thương mại),
+- sao chép, sửa đổi, phân phối,
+- đóng gói lại / tích hợp vào sản phẩm khác,
+
+**với điều kiện bắt buộc sau:**
+
+1. **Ghi nguồn tác giả** trong mọi bản phân phối, sản phẩm phái sinh, hoặc tài liệu người dùng liên quan — rõ ràng, dễ thấy.  
+   Ví dụ chấp nhận được:
+   - `Dựa trên Chấm C++ — © 2026 (tognoek)`
+   - `Powered by Chấm C++ (tognoek)`
+   - Giữ nguyên file `LICENSE` này và thông báo bản quyền trong README / About / credits.
+
+2. Không được xóa hoặc làm mờ thông tin bản quyền / ghi nguồn của tác giả gốc.
+
+3. Phần mềm được cung cấp **“nguyên trạng”**, không bảo đảm. Tác giả không chịu trách nhiệm thiệt hại phát sinh từ việc sử dụng.
+
+Nếu không đồng ý ghi nguồn, bạn **không được** sử dụng mã nguồn / bản dựng của dự án này.
+
+---
+
+## English
+
+This software is released as **open source**. Permission is hereby granted to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, **provided that**:
+
+1. **Attribution is required.** You must give clear, reasonable credit to the original author in all copies or substantial portions of the Software, and in derivative products’ documentation or UI credits where appropriate.  
+   Acceptable examples:
+   - `Based on Chấm C++ — © 2026 (tognoek)`
+   - `Powered by Chấm C++ (tognoek)`
+   - Keep this `LICENSE` file and copyright notices.
+
+2. You may not remove or obscure the original copyright / attribution notices.
+
+3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM USE OF THE SOFTWARE.
+
+If you do not agree to provide attribution, you may **not** use this software.

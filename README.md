@@ -107,6 +107,8 @@ Kéo gói test vào → viết C++ → bấm **Chấm bài**.
 
 ---
 
+
+
 ## ✨ Nó làm được gì?
 
 - 📦 **Kéo thả là có bài** — Themis folder / ZIP, một bài hoặc cả “cặp” `BAI1` `BAI2`…
@@ -117,6 +119,8 @@ Kéo gói test vào → viết C++ → bấm **Chấm bài**.
 - 🧳 **Một file EXE** — double-click là mở web, DB nằm ở `C:\ChamCpp` dùng chung khi cập nhật
 
 ---
+
+
 
 ## 🏃 Chạy
 
@@ -134,6 +138,8 @@ npm run dev    # 🔥
 DB & bài tập: `C:\ChamCpp\data\` (giữ nguyên khi bạn thay EXE mới).
 
 ---
+
+
 
 ### 🎭 Cảm xúc khi chấm (không cần bảng)
 
@@ -156,6 +162,17 @@ Cả phòng lab hiểu. Không ai nói gì. Chỉ có tiếng thở dài.
 
 **PE** 🙈  
 Đáp án đúng. Dấu cách sai. Xuống dòng thừa. Judge lạnh như người yêu cũ — đúng rồi vẫn không cho qua.
+
+---
+
+
+
+## 📜 Giấy phép
+
+Mã nguồn mở — dùng / sửa / phân phối thoải mái, **nhưng phải ghi nguồn tác giả**.
+
+Chi tiết: xem `[LICENSE](./LICENSE)`.  
+© 2026 tognoek · Chấm C++
 
 ---
 

@@ -2,6 +2,8 @@
   "name": "cpp-judge",
   "version": "1.0.0",
   "private": true,
+  "license": "LicenseRef-ChamCpp-Attribution",
+  "author": "tognoek <tognoek@gmail.com>",
   "description": "Standalone local C++ judge for Themis-style test packages",
   "type": "module",
   "engines": {
