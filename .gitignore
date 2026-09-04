@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+web/dist/
+portable/
+*.tsbuildinfo
+
+# Runtime / local data
+data/
+temp/
+logs/
+*.log
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Bundled toolchain (downloaded by npm run setup / package)
+compiler/
+runtime/
+
+# Caches
+.cache/
+.vite/
+*.local
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# Editors / IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+*~
+
+# Debug / coverage
+coverage/
+.nyc_output/
+*.pem
+
+# Misc

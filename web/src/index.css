@@ -1,0 +1,322 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+}
+
+/* ===== DARK THEME (default) ===== */
+:root, [data-theme="dark"] {
+  --color-bg: #12100d;
+  --color-bg2: #1a1713;
+  --color-bg3: #221e18;
+  --color-ink: #f4ead7;
+  --color-muted: #9c907c;
+  --color-line: #322c24;
+  --color-copper: #d4893a;
+  --color-copper2: #f0b36a;
+  --color-ok: #8faf6a;
+  --color-bad: #d36b5a;
+  --color-tle: #d4a054;
+  --color-ce: #7ea0c4;
+  --color-skip: #6d6558;
+  --color-card: #1e1a15;
+  --color-hover: #2a251d;
+  --editor-bg: #16130f;
+  --editor-gutter: #16130f;
+  --editor-gutter-text: #7a7164;
+  --editor-active: #1c1915;
+  --editor-selection: #264f78;
+  --editor-cursor: #f0b36a;
+  --body-grad-1: rgba(212, 137, 58, 0.12);
+  --body-grad-2: rgba(126, 160, 196, 0.08);
+  --body-grad-start: #16130f;
+  --body-grad-mid: #12100d;
+  --body-grad-end: #0e0c0a;
+  --scrollbar-thumb: #3a3329;
+  --noise-opacity: 0.18;
+  --shadow-modal: rgba(0, 0, 0, 0.55);
+}
+
+/* ===== LIGHT THEME ===== */
+[data-theme="light"] {
+  --color-bg: #f3f0ea;
+  --color-bg2: #e8e3da;
+  --color-bg3: #ddd6cb;
+  --color-ink: #12110e;
+  --color-muted: #5c564c;
+  --color-line: #c4bbb0;
+  --color-copper: #9a5f14;
+  --color-copper2: #7d4c10;
+  --color-ok: #2f6b1f;
+  --color-bad: #b33a2c;
+  --color-tle: #9a6a16;
+  --color-ce: #2a6499;
+  --color-skip: #6e675c;
+  --color-card: #efeae2;
+  --color-hover: #ddd6cb;
+  --editor-bg: #fcfbf9;
+  --editor-gutter: #efeae3;
+  --editor-gutter-text: #6e675c;
+  --editor-active: #efeae3;
+  --editor-selection: #9ec8f0;
+  --editor-cursor: #9a5f14;
+  --body-grad-1: rgba(154, 95, 20, 0.05);
+  --body-grad-2: rgba(42, 100, 153, 0.04);
+  --body-grad-start: #f3f0ea;
+  --body-grad-mid: #f3f0ea;
+  --body-grad-end: #ebe6de;
+  --scrollbar-thumb: #b5ada1;
+  --noise-opacity: 0.03;
+  --shadow-modal: rgba(0, 0, 0, 0.28);
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+body {
+  background-image:
+    radial-gradient(1200px 500px at 10% -10%, var(--body-grad-1), transparent 50%),
+    radial-gradient(900px 400px at 110% 0%, var(--body-grad-2), transparent 45%),
+    linear-gradient(180deg, var(--body-grad-start) 0%, var(--body-grad-mid) 40%, var(--body-grad-end) 100%);
+}
+
+body::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  opacity: var(--noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.cm-editor { height: 100%; outline: none; }
+.cm-editor.cm-focused { outline: none; }
+.cm-theme-none { height: 100%; }
+.cm-scroller {
+  font-family: var(--font-mono) !important;
+  line-height: 1.65;
+  font-variant-ligatures: normal;
+  tab-size: 4;
+  -moz-tab-size: 4;
+  /* Ẩn scrollbar gốc — dùng thanh custom */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.cm-scroller::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+.cm-content {
+  tab-size: 4 !important;
+  -moz-tab-size: 4 !important;
+}
+
+/* ── Editor: thanh cuộn custom (chỉ thumb) ── */
+.editor-vscroll {
+  position: absolute;
+  top: 10px;
+  bottom: 14px;
+  width: 10px;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+.editor-wrap:hover .editor-vscroll.is-visible,
+.editor-vscroll.is-visible.is-active,
+.editor-vscroll.is-visible:focus-within {
+  opacity: 1;
+}
+.editor-vscroll.is-visible {
+  pointer-events: auto;
+}
+.editor-vscroll-thumb {
+  position: absolute;
+  left: 2px;
+  top: 0;
+  width: 6px;
+  border-radius: 99px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-copper) 55%, var(--scrollbar-thumb)),
+    color-mix(in srgb, var(--scrollbar-thumb) 70%, transparent)
+  );
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-ink) 8%, transparent);
+  cursor: grab;
+  will-change: transform;
+  transition: width 0.12s ease, left 0.12s ease, background 0.12s ease;
+  touch-action: none;
+}
+.editor-vscroll-thumb:hover,
+.editor-vscroll.is-active .editor-vscroll-thumb {
+  left: 1px;
+  width: 8px;
+  background: var(--color-copper);
+  cursor: grabbing;
+}
+
+.editor-hscroll {
+  position: absolute;
+  bottom: 3px;
+  height: 10px;
+  z-index: 6;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+.editor-hscroll.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.editor-wrap:hover .editor-hscroll.is-visible,
+.editor-hscroll.is-visible.is-active {
+  opacity: 1;
+}
+.editor-hscroll-thumb {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 6px;
+  border-radius: 99px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-copper) 55%, var(--scrollbar-thumb)),
+    color-mix(in srgb, var(--scrollbar-thumb) 70%, transparent)
+  );
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-ink) 8%, transparent);
+  cursor: grab;
+  will-change: transform;
+  transition: height 0.12s ease, top 0.12s ease, background 0.12s ease;
+  touch-action: none;
+}
+.editor-hscroll-thumb:hover,
+.editor-hscroll.is-active .editor-hscroll-thumb {
+  top: 1px;
+  height: 8px;
+  background: var(--color-copper);
+  cursor: grabbing;
+}
+
+/* Selection phải nổi trên active line */
+.cm-selectionLayer {
+  z-index: 1;
+}
+.cm-selectionLayer .cm-selectionBackground {
+  background-color: var(--editor-selection) !important;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes sheen {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.65; transform: scale(0.98); }
+}
+
+.rise { animation: rise 0.3s ease both; }
+.pulse-soft { animation: pulse-soft 1.8s ease-in-out infinite; }
+
+.busy {
+  background: linear-gradient(90deg, #d4893a, #f0b36a, #d4893a);
+  background-size: 200% 100%;
+  animation: sheen 1.1s linear infinite;
+  color: #1a1208 !important;
+}
+
+.test-row { animation: rise 0.25s ease both; }
+
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-copper) 45%, var(--scrollbar-thumb)) transparent;
+}
+.scroll-thin::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.scroll-thin::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--scrollbar-thumb) 55%, transparent);
+  border-radius: 99px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  min-height: 28px;
+}
+.scroll-thin::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-copper) 80%, var(--scrollbar-thumb));
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+.scroll-thin::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Nav link styling */
+.nav-link {
+  position: relative;
+  padding: 6px 14px;
+  font-size: 0.875rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+.nav-link:hover {
+  background: var(--color-hover);
+}
+.nav-link.active {
+  background: var(--color-bg3);
+  font-weight: 600;
+}
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 2px;
+  background: var(--color-copper);
+  border-radius: 1px;
+}
+
+/* Verdict badge */
+.verdict-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
