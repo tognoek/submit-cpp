@@ -85,8 +85,8 @@ function testsFromParsed(parsed: Awaited<ReturnType<typeof parseTestPackage>>, l
     id: i + 1,
     problemId: 1,
     name: t.name,
-    inputPath: t.inputPath,
-    outputPath: t.outputPath,
+    inputPath: t.inputPath ?? "",
+    outputPath: t.outputPath ?? "",
     orderIndex: i,
   }));
 }

@@ -86,7 +86,11 @@ export type ImportPreview = {
   inputFile: string;
   outputFile: string;
   ignoreCase: boolean;
-  tests: { name: string }[];
+  tests: {
+    outputPath?: string;
+    inputPath?: string;
+    name: string;
+}[];
   warnings: string[];
 };
 
